@@ -7,7 +7,12 @@ router.get('/pokemon', (req, res) => {
 })
 // POST(add) a new pokemon to the db
 router.post('/pokemon', (req, res) => {
-    res.send({ type : 'POST'})
+    console.log(req.body)
+    res.send({ 
+        type : 'POST',
+        name: req.body.name,
+        rank: req.body.type
+    })
 })
 // PUT(update) a pokemon in the db
 router.put('/pokemon/:id', (req, res) => {
