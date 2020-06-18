@@ -1,12 +1,11 @@
 const express = require('express')
+const routes = require('./routes/api')
 
 // Set up EXPRESS app //
 const app = express ()
 
-app.get('/api', (req, res) => {
-    console.log('GET Request')
-    res.send({ name: 'Pikachu'})
-})
+// How we use the routes //
+app.use('/api', routes)
 
 // Listen for requests //
 app.listen(process.env.port || 4000, () =>{
