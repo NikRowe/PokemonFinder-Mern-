@@ -47,7 +47,7 @@ pokemonRouter.route('/near_me')
             },
             maxDistance: 1000000,
             spherical: true,
-            distanceField: "dist.calculated"
+            distanceField: "dis"
         })
             .then((pokemon) => {
                 res.send(pokemon)

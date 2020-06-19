@@ -33,10 +33,10 @@ app.use('/', routes)
 app.use('/pokemon', pokemonRouter)
 
 // Error handling middleware //
-app.use(( err, req, res, next ) => {
+app.use((err, req, res, next) => {
     // console.log(err)
     res.status(422)
-    res.send({error: err.message})
+    res.send({ error: err.message })
 })
 
 // Listen for requests //

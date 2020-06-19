@@ -1,22 +1,74 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Niks Pokemon Go</title>
-
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    <link href="/styles.css" rel="stylesheet" type="text/css" />
+    <title>Document</title>
+    <link href="./styles.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js" charset="utf-8"></script>
 
 </head>
 
 <body>
-    <h1 class="title"> Pokemon Go REST API</h1>
+    <h1 class="title">Pokemon REST API</h1>
     <div id="homepage">
-        <h1>Find Pokemon Near You!</h1>
+        <h2>Find Pokemon!</h2>
         <div id="pokemon"></div>
     </div>
+
+    <!-- Create React Component -->
+    <script type="text/babel">
+        var Pokemon = React.createClass({
+            getInitialState: function () {
+                return ({
+                    pokemon: []
+                });
+            },
+            render: function () {
+                var pokemon = this.state.pokemon;
+                pokemon = pokemon.map(function (pokemon, index) {
+                    return (
+                        <li key={index}>
+                            <span className={pokemon.nearBy}></span>
+                            <span className="name">{pokemon.name}</span>
+                            <span className="type">{pokemon.type}</span>
+                            <span className="dist">{Math.floor(pokemon.dis / 1000)} km</span>
+                        </li>
+                    );
+                });
+                return (
+                    <div id="pokemon-container">
+                        <form id="search" onSubmit={this.handleSubmit}>
+                            <label>Enter your Latitude:</label>
+                            <input type="text" ref="lat" placeholder="latitude" required />
+                            <label>Enter your Longitude:</label>
+                            <input type="text" ref="lng" placeholder="longitude" required />
+                            <input type="submit" value="Find pokemon" />
+                        </form>
+                        <ul>{pokemon}</ul>
+                    </div>
+                );
+            },
+            handleSubmit: function (e) {
+                e.preventDefault();
+                var lng = this.refs.lng.value;
+                var lat = this.refs.lat.value;
+
+                fetch('/pokemon/near_me?lng=' + lng + '&lat=' + lat).then(function (data) {
+                    return data.json();
+                }).then(json => {
+                    this.setState({
+                        pokemon: json
+                    });
+                    console.log(json);
+                });
+            }
+        });
+        ReactDOM.render(<Pokemon />, document.getElementById('pokemon'));
+    </script>
 </body>
 
 </html>
