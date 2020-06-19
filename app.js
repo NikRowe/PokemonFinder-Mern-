@@ -19,6 +19,8 @@ mongoose.connect('mongodb://localhost/pokemongo', {
 })
 mongoose.Promise = global.Promise
 
+app.use(express.static('public'))
+
 // BP parses the client body and attaches it to the req param //
 app.use(bodyParser.json())
 
