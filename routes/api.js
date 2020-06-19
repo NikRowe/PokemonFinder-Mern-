@@ -15,6 +15,7 @@ router.get('/pokemon', (req, res, next) => {
             res.json(pokemon);
         })
 })
+
 // POST(add) a new pokemon to the db
 router.post('/pokemon', (req, res, next) => {
     Pokemon.create(req.body) // mongoose method returning promise to get body data and save to db with the Pokemon Schema
@@ -23,17 +24,25 @@ router.post('/pokemon', (req, res, next) => {
         })
         .catch(next)
 })
+
 // PUT(update) a pokemon in the db
 router.put('/pokemon/:id', (req, res, next) => {
-    res.send({ type: 'PUT' })
+    // find Pokemon by id and update with request body then use .then followed by Pokemon.findOne method find the updated pokemon in the db and send back to client
+    Pokemon.findByIdAndUpdate({ _id: req.params.id }, req.body)
+        .then(() => {
+            Pokemon.findOne({ _id: req.params.id })
+                .then((pokemon) => {
+                    res.send(pokemon)
+                })
+        })
+        .catch(next)
 })
+
 // DELETE pokemon from the db
 router.delete('/pokemon/:id', (req, res, next) => {
     // Looks in Pokemon Schema and uses Mongoose method findByIdAndRemove with mongoose obj property _id set to id of the client request. then use .then method to send removed pokemon obj to server response //
     Pokemon.findByIdAndRemove({ _id: req.params.id })
-        .then((pokemon) => {
-            res.send(pokemon)
-        })
+        .then((pokemon) => { res.send(pokemon) })
         .catch(next)
 })
 
