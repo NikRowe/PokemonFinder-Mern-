@@ -38,6 +38,22 @@ pokemonRouter.route('/')
             .catch(next)
     })
 
+pokemonRouter.route('/near_me')
+    .get((req, res, next) => {
+        Pokemon.aggregate().near({
+            near: {
+                'type': 'Point',
+                'coordinates': [parseFloat(req.query.lng), parseFloat(req.query.lat)]
+            },
+            maxDistance: 1000000,
+            spherical: true,
+            distanceField: "dist.calculated"
+        })
+            .then((pokemon) => {
+                res.send(pokemon)
+            })
+            .catch(next)
+    })
 
 // SPECIFIC POKEMON //
 pokemonRouter.route('/:id')
@@ -75,5 +91,9 @@ pokemonRouter.route('/:id')
             })
             .catch(next)
     })
+
+
+
+
 
 module.exports = pokemonRouter
