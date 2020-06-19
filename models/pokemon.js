@@ -9,11 +9,13 @@ const PokemonSchema = new Schema({
     },
     type: {
         type: String
-    }, 
+    },
     nearBy: {
         type: Boolean,
         default: false
     }
+}, {
+    timestamps: true
     // add in location //
 })
 

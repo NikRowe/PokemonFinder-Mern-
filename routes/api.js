@@ -1,10 +1,19 @@
 const express = require('express')
-const router = express.Router()
 const Pokemon = require('../models/pokemon')
+const bodyParser = require('body-parser')
+
+const router = express.Router()
+
+router.use(bodyParser.json())
 
 // GET list of pokemon from the db
 router.get('/pokemon', (req, res, next) => {
-    res.send({ type: 'GET' })
+    Pokemon.find()
+        .then(pokemon => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(pokemon);
+        })
 })
 // POST(add) a new pokemon to the db
 router.post('/pokemon', (req, res, next) => {
@@ -20,7 +29,12 @@ router.put('/pokemon/:id', (req, res, next) => {
 })
 // DELETE pokemon from the db
 router.delete('/pokemon/:id', (req, res, next) => {
-    res.send({ type: 'DELETE' })
+    // Looks in Pokemon Schema and uses Mongoose method findByIdAndRemove with mongoose obj property _id set to id of the client request. then use .then method to send removed pokemon obj to server response //
+    Pokemon.findByIdAndRemove({ _id: req.params.id })
+        .then((pokemon) => {
+            res.send(pokemon)
+        })
+        .catch(next)
 })
 
 module.exports = router
